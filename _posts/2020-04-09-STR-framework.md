@@ -28,7 +28,7 @@ input image $$X$$ -> normalized image $$\tilde X$$
 
 fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
 
-1\) **localization network** : finding a text boundary(#TPS-Implementation)
+1\) **localization network** : finding a text boundary(#tps-implementation)
 
 input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다.
 
