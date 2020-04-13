@@ -32,11 +32,11 @@ input image $$X$$ -> normalized image $$\tilde X$$
 
 fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
 
-1\) **localization network** : finding a text boundary(#tps-implementation)
+1\) [**localization network**](#tps-implementation) : finding a text boundary
 
 input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다.
 
-$$C = [c_1, ... , c_F] \in \mathbb{R^(2*F)}, c_f = [x_f, y_f]^T$$
+$$C = [c_1, ... , c_F] \in \mathbb{R^{2*F}}, c_f = [x_f, y_f]^T$$
 
 $$\tilde C$$ : normalized image $$\tilde X$$의 pre-defined top & bottom location
 
@@ -44,9 +44,9 @@ $$\tilde C$$ : normalized image $$\tilde X$$의 pre-defined top & bottom locatio
 
 mapping function (localization network에서 한 정한 identified region - normalized images)
 
-![Formula 1](/assets/images/post/str/formula1.PNG)  $$T \in \mathbb{R^(2*(F+3))}$$
+![Formula 1](/assets/images/post/str/formula1.PNG)  $$T \in \mathbb{R^(2*{F+3})}$$
 
-![Formula 2](/assets/images/post/str/formula2.PNG)  $$R = \{d_(ij)^2\}, d_(ij) = $$euclidean distance between $$\tilde c_i$$ & $$\tilde c_j$$
+![Formula 2](/assets/images/post/str/formula2.PNG)  $$R = \{d_{ij}^2\}, d_{ij} = $$euclidean distance between $$\tilde c_i$$ & $$\tilde c_j$$
 
 3\) **image sampler** : generating a normalized image by using the values of pixels and the linking information
 
@@ -122,7 +122,7 @@ FC layer를 포함한 모든 hidden state의 dimension은 256이다.
 \* Seq. module을 사용하지 않은 경우, H = V
 
 \* LSTM (Long Short Term Memory) : RNN(Recurrent Neural Networks)의 vanishing gradient problem을 극복하기 위해서 고안됨.
-(참고 : http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
+(참고 : <http://colah.github.io/posts/2015-08-Understanding-LSTMs/>)
 
 
 ## 4. Prediction Stage
@@ -141,7 +141,7 @@ C : 36 alphanumeric characters + 1 blank
 
 mapping function M : 반복되는 문자와 blank를 제거함으로써 map한다.
 
-$$Y \approx M(argmax ( p(\pi \vert H) ))$$
+$$Y \approx M(argmax{p(\pi \vert H)})$$
 
 
 ### 2) Attn (Attention mechanism)
