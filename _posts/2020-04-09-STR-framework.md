@@ -141,7 +141,7 @@ C : 36 alphanumeric characters + 1 blank
 
 mapping function M : 반복되는 문자와 blank를 제거함으로써 map한다.
 
-$$Y \approx M(argmax(p(\pi \vert H)))$$
+$$Y \approx M(argmax\ p(\pi \vert H))$$
 
 
 ### 2) Attn (Attention mechanism)
@@ -150,5 +150,5 @@ FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현
 
 C : 36 alphanumeric characters + 1 EOS(end of sentence)
 
-$$each step t, y_t = softmax(W_{_0S_t} + b_0)$$
+$$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
 
