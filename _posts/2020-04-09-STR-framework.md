@@ -28,27 +28,25 @@ input image $$X$$ -> normalized image $$\tilde X$$
 
 fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
 
-    1\) **localization network** : finding a text boundary(#TPS-Implementation)
+1\) **localization network** : finding a text boundary(#TPS-Implementation)
 
-    input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다.
+input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다.
 
-    $$C = [c_1, ... , c_F] \in \mathbb{R^2*F}, c_f = [x_f, y_f]^T$$
+$$C = [c_1, ... , c_F] \in \mathbb{R^2*F}, c_f = [x_f, y_f]^T$$
 
-    $$\tilde C$$는 normalized image $$\tilde X$$의 pre-defined 위아래 위치이다.
+$$\tilde C$$는 normalized image $$\tilde X$$의 pre-defined 위아래 위치이다.
 
+2\) **grid generator** : linking the location of the pixels in the boundary to those of the normalized image
 
-    2\) **grid generator** : linking the location of the pixels in the boundary to those of the normalized image
+mapping function (localization network에서 한 정한 identified region - normalized images)
 
-    mapping function (localization network에서 한 정한 identified region - normalized images)
+![Formula 1](/assets/images/post/str/formula1.PNG) $$T \in \mathbb{R^2*(F+3)}$$
 
-    ![Formula 1](/assets/images/post/str/formula1.PNG) $$T \in \mathbb{R^2*(F+3)}$$
+![Formula 2](/assets/images/post/str/formula2.PNG) $$R = \{d_ij^2\}, d_ij = $$euclidean distance between $$\tilde c_i$$ - $$\tilde c_j$$
 
-    ![Formula 2](/assets/images/post/str/formula2.PNG) $$R = \{d_ij^2\}, d_ij = $$euclidean distance between $$\tilde c_i$$ - $$\tilde c_j$$
+3\) **image sampler** : generating a normalized image by using the values of pixels and the linking information
 
-
-    3\) **image sampler** : generating a normalized image by using the values of pixels and the linking information
-
-    grid generator으로 결정된 input image의 픽셀을 interpolate하여 normalized image를 생성한다.
+grid generator으로 결정된 input image의 픽셀을 interpolate하여 normalized image를 생성한다.
 
 
 ### TPS-Implementation
