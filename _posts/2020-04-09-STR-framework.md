@@ -44,7 +44,7 @@ $$\tilde C$$ : normalized image $$\tilde X$$의 pre-defined top & bottom locatio
 
 mapping function (localization network에서 한 정한 identified region - normalized images)
 
-![Formula 1](/assets/images/post/str/formula1.PNG)  $$T \in \mathbb{R^(2*{F+3})}$$
+![Formula 1](/assets/images/post/str/formula1.PNG)  $$T \in \mathbb{R^{2*F+3}}$$
 
 ![Formula 2](/assets/images/post/str/formula2.PNG)  $$R = \{d_{ij}^2\}, d_{ij} = $$euclidean distance between $$\tilde c_i$$ & $$\tilde c_j$$
 
@@ -141,7 +141,7 @@ C : 36 alphanumeric characters + 1 blank
 
 mapping function M : 반복되는 문자와 blank를 제거함으로써 map한다.
 
-$$Y \approx M(argmax{p(\pi \vert H)})$$
+$$Y \approx M(argmax(p(\pi \vert H)))$$
 
 
 ### 2) Attn (Attention mechanism)
@@ -150,5 +150,5 @@ FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현
 
 C : 36 alphanumeric characters + 1 EOS(end of sentence)
 
-$$each step t, y_t = softmax(W_0_S_t + b_0)$$
+$$each step t, y_t = softmax(W_{_0S_t} + b_0)$$
 
