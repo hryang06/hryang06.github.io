@@ -110,12 +110,23 @@ gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(G
 
 ### 3) ResNet (Residual Network)
 
+*<https://arxiv.org/abs/1512.03385> [ResNet] Deep Residual Learning for Image Recognition*
+
+- neural network의 구조가 deep 할수록 vanishing/exploding gradient 문제로 정확도가 줄어든다. (weight 분포가 균등하지 않고 역전파가 제대로 이뤄지지 않기 때문이다.) ResNet은 이러한 문제를 해결하기 위해 제안되었다.
+- **residual learning**
+    - 기존 네트워크 $$H(x)$$에서 $$F(x) = H(x) - x$$로 변형시켜 $$F(x) + x$$를 학습시키는 것을 말한다.
+    - shortcut connection : $$y = \mathcal{F}(x, \{W_i\} + x)$$
+
+    ![Figure 2](/assets/images/post/resnet/figure2.PNG)
+- ResNet은 deep하더라도 더 좋은 성능을 보였다.
+![Figure 4](/assets/images/post/resnet/figure4.PNG)
+
+
 FAN[4]에서 사용한 것과 동일한 network를 사용하였다. 총 29 trainable layer가 있다.
 
 ![Table 7](/assets/images/post/str/table7.PNG)
 
 -> output : 512 channels * 26 columns
-
 
 
 ## 3. Sequence Modeling Stage
