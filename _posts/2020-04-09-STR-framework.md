@@ -30,9 +30,16 @@ What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model A
 
 ### TPS transformation
 
-input image $$X$$ -> normalized image $$\tilde X$$
+- input image $$X$$ -> normalized image $$\tilde X$$
 
-fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
+- fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
+
+- **STN (Spatial Transformer Network)**
+    - CNN max pooling : feature map을 축소하여, 분류 작업에 유리한 invariance를 얻을 수 있음. 예를 들어, 얼굴 인식에서 위치와 상관없이 눈, 코, 입을 인식할 수 있도록 한다.
+    - BUT! translation(위치)와 관계없이 동일하게 인식하지만, orientation(방향), proportion(비율) 등 달라지면 인식을 못한다. (물체를 바라보는 시점도 취약)
+    - data augmentation(다양한 방식으로 변형하여 이미지 생성)을 사용하면 이를 극복할 수 있으나 학습 시간이 길어진다.
+    - 이러한 CNN의 spatially inavariant(불변성)를 한계라고 생각하여 STN 등장하였다. (max pooling의 2*2 단위 연산으로는 data의 다양한 spatial vaiability(scale, rotation, translation) 대처하기 힘들다.)
+    - STN은 image 또는 feature map에서 관련 영역만 선택하여 가장 일반적인 형태로 변환 등 활용이 가능하다. 또한 scaling, cropping, rotation, non-grid deformation(thin plate spline) 등 지원한다.
 
 #### 1\) [**localization network**](#tps-implementation) : finding a text boundary
 
