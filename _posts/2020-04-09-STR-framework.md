@@ -22,9 +22,11 @@ What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model A
 
 ## 1. Transformation Stage
 
-![Figure 11](/assets/images/post/str/figure11.PNG)
+*<https://arxiv.org/abs/1506.02025> [STN] Spatial Transformer Network*
 
-TPS를 추가하는 것과 하지 않는 것은 크게 차이가 없다. 하지만, TPS를 사용하는 것이 사용하지 않을 때보다 시간이 길어지고 메모리가 약간 더 사용하지만 정확도가 높아진다.
+*<https://arxiv.org/abs/1603.03915> [RARE] Robust Scene Text Recognition with Automatic Rectification*
+
+![Figure 2](/assets/images/post/stn/figure2.PNG)
 
 ### TPS transformation
 
@@ -32,30 +34,34 @@ input image $$X$$ -> normalized image $$\tilde X$$
 
 fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
 
-1\) [**localization network**](#tps-implementation) : finding a text boundary
+#### 1\) [**localization network**](#tps-implementation) : finding a text boundary
 
-input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다.
+input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다. $$\tilde C$$는 초기화되는 좌표로 normalized image(rectified image)에서의 fiducial points를 의미한다.
 
-$$C = [c_1, ... , c_F] \in \mathbb{R^{2*F}}, c_f = [x_f, y_f]^T$$
-
+$$C = [c_1, ... , c_F] \in \mathbb{R^{2*F}}, c_f = [x_f, y_f]^T$$<br>
 $$\tilde C$$ : normalized image $$\tilde X$$의 pre-defined top & bottom location
 
-2\) **grid generator** : linking the location of the pixels in the boundary to those of the normalized image
+![Figure 6](/assets/images/post/stn/figure6.PNG)
 
-mapping function (localization network에서 한 정한 identified region - normalized images)
+#### 2\) **grid generator** : linking the location of the pixels in the boundary to those of the normalized image
+
+![Figure 3](/assets/images/post/stn/figure3.PNG)
+
+localization network에서 찾은 identified region과 normalized image(rectified image)를 연결하는 T를 찾는다.
 
 ![Formula 1](/assets/images/post/str/formula1.PNG)  $$T \in \mathbb{R^{2*F+3}}$$
 
 ![Formula 2](/assets/images/post/str/formula2.PNG)  $$R = \{d_{ij}^2\}, d_{ij} = $$euclidean distance between $$\tilde c_i$$ & $$\tilde c_j$$
 
-3\) **image sampler** : generating a normalized image by using the values of pixels and the linking information
+#### 3\) **image sampler** : generating a normalized image by using the values of pixels and the linking information
 
-grid generator으로 결정된 input image의 픽셀을 interpolate하여 normalized image를 생성한다.
+grid generator으로 결정된 input image의 픽셀을 interpolate하여 normalized image를 생성한다. 최종 output이 생성된다.
 
+![Figure 4](/assets/images/post/stn/figure4.PNG)
 
 ### TPS-Implementation
 
-TPS는 input image의 fiducial points를 계산하는 localization network를 필요로 한다. RARE[25]에서 사용한 요소에다가 Batch Normalization layers(BN)와 network의 training을 안정시키기 위해 adaptive average pooling(APool)을 추가한다.
+TPS는 input image의 fiducial points를 계산하는 localization network를 필요로 한다. RARE[[25]](#robust-scene-text-recognition-with-automatic-rectification)에서 사용한 요소에다가 Batch Normalization layers(BN)와 network의 training을 안정시키기 위해 adaptive average pooling(APool)을 추가한다.
 
 ![Table 4](/assets/images/post/str/table4.PNG)
 
