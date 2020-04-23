@@ -58,7 +58,7 @@ $$\tilde C$$ : normalized image $$\tilde X$$의 pre-defined top & bottom locatio
 #### 2\) **grid generator** 
 : linking the location of the pixels in the boundary to those of the normalized image
 
-![Figure 3](/assets/images/post/stn/figure3.PNG)
+![Figure 3](/assets/images/post/stn/figure3.PNG){: .center}
 
 localization network에서 찾은 identified region과 normalized image(rectified image)를 연결하는 T를 찾는다.
 
@@ -71,7 +71,7 @@ localization network에서 찾은 identified region과 normalized image(rectifie
 
 grid generator으로 결정된 input image의 픽셀을 interpolate하여 normalized image를 생성한다. 최종 output이 생성된다.
 
-![Figure 4](/assets/images/post/stn/figure4.PNG)
+![Figure 4](/assets/images/post/stn/figure4.PNG){: .center}
 
 ### 1.2 TPS-Implementation
 
@@ -129,7 +129,9 @@ gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(G
     - ResNet은 deep하더라도 더 좋은 성능을 보였다.
     ![Figure 4](/assets/images/post/resnet/figure4.PNG)
 
-- FAN[4]에서 사용한 것과 동일한 network를 사용하였다. 총 29 trainable layer가 있다.
+- FAN[4]에서 사용한 것과 동일한 network를 사용하였다.
+- 총 29 trainable layer가 있다.
+
 ![Table 7](/assets/images/post/str/table7.PNG)
 
 -> output : 512 channels * 26 columns
@@ -159,14 +161,14 @@ input $$H$$ -> final prediction $$Y = y_1,y_2,... $$ (sequence of characters)
 
 C : character labe set (37)
 
+![Figure 14](/assets/images/post/str/figure14.PNG)
+
+Attn은 CTC에 비해 정확도를 높이려고 할 때 시간이 오래 걸린다.
+
 | pred. | examples |
 |-------|----------|
 | CTC | CRNN, GRCNN, Rosetta, STAR-Net |
 | Attn | R2AM, RARE |
-
-![Figure 14](/assets/images/post/str/figure14.PNG)
-
-Attn은 CTC에 비해 정확도를 높이려고 할 때 시간이 오래 걸린다.
 
 ### 4.1 CTC (Connetionist Temporal Classification)
 
@@ -187,7 +189,7 @@ too를 too로 encoding하면, 이후 decoding할 때 to라는 단어로 예측�
 
 **2. Loss Function**
 
-![Figure 3](/assets/images/post/ctc/figure3.png){: width="40%" height="40%"}
+![Figure 3](/assets/images/post/ctc/figure3.png)
 
 t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림을 따라 모든 경우에 대해 구할 수 있는데, 예를 들어 'aa'는 0.4*0.4 = 0.16이 나온다. 만약 ground truth 문자가 'a'라면, 'aa', 'a-', '-a'에 대해 모두 합하여 0.64라는 것을 알 수 있다. 여기서 0.64는 loss가 아니라 ground truth의 probability를 의미하므로, loss는 probability의 음의 로그를 취하면 된다.
 
@@ -207,7 +209,7 @@ best path decoding은 다음과 같다.
 1) 중복되는 문자를 제거한다. (-s-t-ate)
 2) blank(-)를 제거한다. (state)
 
-![CRNN_fig](/assets/images/post/ctc/crnn_fig.PNG)
+![CRNN_fig](/assets/images/post/ctc/crnn_fig.PNG){: .center}
 
 ---
 
