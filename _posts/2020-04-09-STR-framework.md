@@ -99,6 +99,8 @@ CRNN[24], RARE[25]에서 사용한 VGG를 구현하였다.
 
 ### 2) RCNN (recurrently applied CNN)
 
+*<https://papers.nips.cc/paper/6637-gated-recurrent-convolution-neural-network-for-ocr.pdf> [GRCNN] Gated Recurrent Convolution Neural Network for OCR*
+
 gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(GRCNN)을 구현하였다.
 
 ![Table 6](/assets/images/post/str/table6.PNG)
@@ -169,6 +171,8 @@ $$Y \approx M(argmax\ p(\pi \vert H))$$
 
 
 ### 2) Attn (Attention mechanism)
+
+*<https://arxiv.org/abs/1709.02054> [Attn] Focusing attention: Towards accurate text recognition in natural images*
 
 FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현하였다.
 
