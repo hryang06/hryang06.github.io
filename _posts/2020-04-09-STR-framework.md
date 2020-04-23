@@ -26,14 +26,18 @@ What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model A
 
 *[[RARE]](https://arxiv.org/abs/1603.03915) Robust Scene Text Recognition with Automatic Rectification*
 
-> **STN (Spatial Transformer Network)**
-> - CNN max pooling : feature map을 축소하여, 분류 작업에 유리한 invariance를 얻을 수 있음. 예를 들어, 얼굴 인식에서 위치와 상관없이 눈, 코, 입을 인식할 수 있도록 한다.
-> - BUT! translation(위치)와 관계없이 동일하게 인식하지만, orientation(방향), proportion(비율) 등 달라지면 인식을 못한다. (물체를 바라보는 시점도 취약)
-> - data augmentation(다양한 방식으로 변형하여 이미지 생성)을 사용하면 이를 극복할 수 있으나 학습 시간이 길어진다.
-> - 이러한 CNN의 spatially inavariant(불변성)를 한계라고 생각하여 STN 등장하였다. (max pooling의 2*2 단위 연산으로는 data의 다양한 spatial vaiability(scale, rotation, translation) 대처하기 힘들다.)
-> - STN은 image 또는 feature map에서 관련 영역만 선택하여 가장 일반적인 형태로 변환 등 활용이 가능하다. 또한 scaling, cropping, rotation, non-grid deformation(thin plate spline) 등 지원한다.
+---
 
-![Figure 2](/assets/images/post/stn/figure2.PNG)
+**STN (Spatial Transformer Network)**
+- CNN max pooling : feature map을 축소하여, 분류 작업에 유리한 invariance를 얻을 수 있음. 예를 들어, 얼굴 인식에서 위치와 상관없이 눈, 코, 입을 인식할 수 있도록 한다.
+- BUT! translation(위치)와 관계없이 동일하게 인식하지만, orientation(방향), proportion(비율) 등 달라지면 인식을 못한다. (물체를 바라보는 시점도 취약)
+- data augmentation(다양한 방식으로 변형하여 이미지 생성)을 사용하면 이를 극복할 수 있으나 학습 시간이 길어진다.
+- 이러한 CNN의 spatially inavariant(불변성)를 한계라고 생각하여 STN 등장하였다. (max pooling의 2*2 단위 연산으로는 data의 다양한 spatial vaiability(scale, rotation, translation) 대처하기 힘들다.)
+- STN은 image 또는 feature map에서 관련 영역만 선택하여 가장 일반적인 형태로 변환 등 활용이 가능하다. 또한 scaling, cropping, rotation, non-grid deformation(thin plate spline) 등 지원한다.
+
+    ![Figure 2](/assets/images/post/stn/figure2.PNG)
+
+---
 
 ### 1.1 TPS transformation
 
@@ -183,7 +187,7 @@ too를 too로 encoding하면, 이후 decoding할 때 to라는 단어로 예측�
 
 **2. Loss Function**
 
-![Figure 4](/assets/images/post/ctc/figure3.PNG){: width="40%" height="40%"}
+![Figure 3](/assets/images/post/ctc/figure3.PNG){: width="40%" height="40%"}
 
 t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림을 따라 모든 경우에 대해 구할 수 있는데, 예를 들어 'aa'는 0.4*0.4 = 0.16이 나온다. 만약 ground truth 문자가 'a'라면, 'aa', 'a-', '-a'에 대해 모두 합하여 0.64라는 것을 알 수 있다. 여기서 0.64는 loss가 아니라 ground truth의 probability를 의미하므로, loss는 probability의 음의 로그를 취하면 된다.
 
@@ -196,12 +200,16 @@ best path decoding은 다음과 같다.
 2) 중복되는 문자를 먼저 제거하고, (a-b)
 3) 모든 blank를 제거한다. (ab)
 
+---
 
-> **CRNN 구조 : None-VGG-BiLSTM-CTC**<br>
-> *[[CRNN]](https://arxiv.org/abs/1507.05717) An End-to-End Trainable Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition*<br>
-> 1) 중복되는 문자를 제거한다. (-s-t-ate)
-> 2) blank(-)를 제거한다. (state)
-> ![CRNN_fig](/assets/images/post/ctc/crnn_fig.PNG)
+**CRNN 구조 : None-VGG-BiLSTM-CTC**<br>
+*[[CRNN]](https://arxiv.org/abs/1507.05717) An End-to-End Trainable Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition*<br>
+1) 중복되는 문자를 제거한다. (-s-t-ate)
+2) blank(-)를 제거한다. (state)
+
+![CRNN_fig](/assets/images/post/ctc/crnn_fig.PNG)
+
+---
 
 ### 4.2 Attn (Attention mechanism)
 
