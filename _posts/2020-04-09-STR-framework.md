@@ -187,13 +187,13 @@ too를 too로 encoding하면, 이후 decoding할 때 to라는 단어로 예측�
 
 **2. Loss Function**
 
-![Figure 3](/assets/images/post/ctc/figure3.PNG){: width="40%" height="40%"}
+![Figure 3](/assets/images/post/ctc/figure3.png){: width="40%" height="40%"}
 
 t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림을 따라 모든 경우에 대해 구할 수 있는데, 예를 들어 'aa'는 0.4*0.4 = 0.16이 나온다. 만약 ground truth 문자가 'a'라면, 'aa', 'a-', '-a'에 대해 모두 합하여 0.64라는 것을 알 수 있다. 여기서 0.64는 loss가 아니라 ground truth의 probability를 의미하므로, loss는 probability의 음의 로그를 취하면 된다.
 
 **3. Decoding**
 
-![Figure 4](/assets/images/post/ctc/figure4.PNG)
+![Figure 4](/assets/images/post/ctc/figure4.png)
 
 best path decoding은 다음과 같다.
 1) 매 time step마다 가장 높은 확률을 가지는 문자를 선택한다. (aaa-b)
