@@ -1,5 +1,5 @@
 ---
-title: STR framework details (appendix D)
+title: STR module details
 layout: single
 author_profile: true
 read_time: true
@@ -17,7 +17,7 @@ article_tag2: scene text recognition
 last_modified_at: 2020-04-09 11:38:00 +0800
 ---
 
-What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model Analysis의 Appendix D를 정리한 글입니다.
+What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model Analysis에서 등장하는 modele을 정리한 글입니다.
 
 
 ## 1. Transformation Stage
@@ -42,7 +42,6 @@ What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model A
 ### 1.1 TPS transformation
 
 - input image $$X$$ -> normalized image $$\tilde X$$
-
 - fiducial points set(F 개) 사이에서 smooth spline interpolation을 사용한다.
 
 #### 1\) [**localization network**](#1.2-tps-implementation)
@@ -90,11 +89,6 @@ TPS는 input image의 fiducial points를 계산하는 localization network를 �
 
 input image $$X$$ or $$\tilde X$$ -> feature map $$V = \{v_i\}, ( i = 1, ... , I )$$ (num of columns in feature map)
 
-![Figure 12](/assets/images/post/str/figure12.PNG)
-
-VGG가 가장 시간이 적게 걸리지만 낮은 정확도를 보인다. RCNN은 가장 시간이 걸리지만 가장 적은 메모리와 VGG보다 높은 정확도를 보인다. ResNet이 가장 높은 정확도를 가지지만, 다른 module에 비해 많은 메모리를 필요로 한다. 따라서, 메모리 제약이 존재하면 RCNN이 가장 좋은 trade-off이고, 그렇지 않다면 ResNet을 사용해야 한다. 시간적인 측면에서 세 module 모두 차이가 크지 않으므로 극단적인 경우에만 고려한다.
-
-
 ### 2.1 VGG
 
 CRNN[24], RARE[25]에서 사용한 VGG를 구현하였다.
@@ -141,29 +135,27 @@ gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(G
 
 $$H = Seq.(V)$$
 
-![Figure 13](/assets/images/post/str/figure13.PNG)
-
-TPS와 비슷하지만, BiLSTM을 사용하면 비슷한 시간과 메모리에 비해 더 높은 정확도로 향상시킨다.
-
 ### 3.1 BiLSTM (Bidirectional LSTM)
 
 - CRNN[24]에서 사용한 2-layers BiLSTM을 구현하였다.
 - FC layer를 포함한 모든 hidden state의 dimension은 256이다.
 - Seq. module을 사용하지 않은 경우, H = V
 
-> **LSTM (Long Short Term Memory)**<br> RNN(Recurrent Neural Networks)의 vanishing gradient problem을 극복하기 위해서 고안되었다. RNN의 hidden state에 cell state를 추가한 구조를 보인다.
+---
+
+**LSTM (Long Short Term Memory)**<br>
+RNN(Recurrent Neural Networks)의 vanishing gradient problem을 극복하기 위해서 고안되었다. RNN의 hidden state에 cell state를 추가한 구조를 보인다.<br>
 (참고 : <http://colah.github.io/posts/2015-08-Understanding-LSTMs/>)
+
+---
 
 
 ## 4. Prediction Stage
 
 input $$H$$ -> final prediction $$Y = y_1,y_2,... $$ (sequence of characters)
 
-C : character labe set (37)
+C : character label set (37)
 
-![Figure 14](/assets/images/post/str/figure14.PNG)
-
-Attn은 CTC에 비해 정확도를 높이려고 할 때 시간이 오래 걸린다.
 
 | pred. | examples |
 |-------|----------|
@@ -187,27 +179,27 @@ $$Y \approx M(argmax\ p(\pi \vert H))$$
 
 too를 too로 encoding하면, 이후 decoding할 때 to라는 단어로 예측할 수 있다. 이러한 중복 문제를 해결하기 위해 blank를 사용한다. 여기서 '-t-o'와 'to', 그외에도 'too', 't-oo' 등은 모두 'to'를 가리키지만 이미지에서는 서로 다른 정렬을 보인다.
 
-**2. Loss Function**
+**2. Decoding**
+
+![Figure 4](/assets/images/post/ctc/figure4.png)
+
+best path decoding은 다음과 같다.
+1. 매 time step마다 가장 높은 확률을 가지는 문자를 선택한다. (aaa-b)
+2. 중복되는 문자를 먼저 제거하고, (a-b)
+3. 모든 blank를 제거한다. (ab)
+
+**3. Loss Function**
 
 ![Figure 3](/assets/images/post/ctc/figure3.png)
 
 t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림을 따라 모든 경우에 대해 구할 수 있는데, 예를 들어 'aa'는 0.4*0.4 = 0.16이 나온다. 만약 ground truth 문자가 'a'라면, 'aa', 'a-', '-a'에 대해 모두 합하여 0.64라는 것을 알 수 있다. 여기서 0.64는 loss가 아니라 ground truth의 probability를 의미하므로, loss는 probability의 음의 로그를 취하면 된다.
 
-**3. Decoding**
-
-![Figure 4](/assets/images/post/ctc/figure4.png)
-
-best path decoding은 다음과 같다.
-1) 매 time step마다 가장 높은 확률을 가지는 문자를 선택한다. (aaa-b)
-2) 중복되는 문자를 먼저 제거하고, (a-b)
-3) 모든 blank를 제거한다. (ab)
-
 ---
 
 **CRNN 구조 : None-VGG-BiLSTM-CTC**<br>
 *[[CRNN]](https://arxiv.org/abs/1507.05717) An End-to-End Trainable Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition*<br>
-1) 중복되는 문자를 제거한다. (-s-t-ate)
-2) blank(-)를 제거한다. (state)
+1. 중복되는 문자를 제거한다. (-s-t-ate)
+2. blank(-)를 제거한다. (state)
 
 ![CRNN_fig](/assets/images/post/ctc/crnn_fig.PNG){: .center}
 
@@ -217,9 +209,27 @@ best path decoding은 다음과 같다.
 
 *[[Attn]](https://arxiv.org/abs/1709.02054) Focusing attention: Towards accurate text recognition in natural images*
 
-FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현하였다.
+*[[RARE]](https://arxiv.org/abs/1603.03915) Robust Scene Text Recognition with Automatic Rectification*
 
-C : 36 alphanumeric characters + 1 EOS(end of sentence)
+- FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현하였다.
+- C : 36 alphanumeric characters + 1 EOS(end of sentence)
 
 $$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
+
+**1. Encoding**
+
+input을 sequential representation으로 변환
+
+![Figure 5](/assets/images/post/attn/figure5.png)
+
+
+**2. Decoding**
+
+output sequence 생성
+
+
+
+**3. Loss Function**
+
+
 
