@@ -89,24 +89,24 @@ TPS는 input image의 fiducial points를 계산하는 localization network를 �
 
 input image $$X$$ or $$\tilde X$$ -> feature map $$V = \{v_i\}, ( i = 1, ... , I )$$ (num of columns in feature map)
 
+- input channel = 1
+- output channel = 512
+
 ### 2.1 VGG
 
-CRNN[24], RARE[25]에서 사용한 VGG를 구현하였다.
+- CRNN[24], RARE[25]에서 사용한 VGG를 구현하였다.
 
 ![Table 5](/assets/images/post/str/table5.PNG)
 
--> output : 512 channels * 24 columns
 
 
 ### 2.2 RCNN (recurrently applied CNN)
 
 *[[GRCNN]](https://papers.nips.cc/paper/6637-gated-recurrent-convolution-neural-network-for-ocr.pdf) Gated Recurrent Convolution Neural Network for OCR*
 
-gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(GRCNN)을 구현하였다.
+- gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(GRCNN)을 구현하였다.
 
-![Table 6](/assets/images/post/str/table6.PNG)
-
--> output : 512 channels * 26 columns
+    ![Table 6](/assets/images/post/str/table6.PNG)
 
 - classification(물체 하나하나 인식)뿐만 아니라 object detection(bounding box로 다양한 object 인식)에서도 높은 성능을 보인다.
 
@@ -115,6 +115,10 @@ gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(G
 
 *[[ResNet]](https://arxiv.org/abs/1512.03385) Deep Residual Learning for Image Recognition*
 
+- FAN[4]에서 사용한 것과 동일한 network를 사용하였다.
+
+    ![Table 7](/assets/images/post/str/table7.PNG)
+
 - neural network의 구조가 deep 할수록 vanishing/exploding gradient 문제로 정확도가 줄어든다. (weight 분포가 균등하지 않고 역전파가 제대로 이뤄지지 않기 때문이다.) ResNet은 이러한 문제를 해결하기 위해 제안되었다.
 - **residual learning**
     - 기존 네트워크 $$H(x)$$에서 $$F(x) = H(x) - x$$로 변형시켜 $$F(x) + x$$를학습시키는 것을 말한다.
@@ -122,13 +126,6 @@ gating mechanism으로 recursive하게 적용할 수 있는 RCNN인 Gated RCNN(G
     ![Figure 2](/assets/images/post/resnet/figure2.PNG)<br>
     - ResNet은 deep하더라도 더 좋은 성능을 보였다.
     ![Figure 4](/assets/images/post/resnet/figure4.PNG)
-
-- FAN[4]에서 사용한 것과 동일한 network를 사용하였다.
-- 총 29 trainable layer가 있다.
-
-![Table 7](/assets/images/post/str/table7.PNG)
-
--> output : 512 channels * 26 columns
 
 
 ## 3. Sequence Modeling Stage
@@ -207,14 +204,12 @@ t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림
 
 ### 4.2 Attn (Attention mechanism)
 
-*[[Attn]](https://arxiv.org/abs/1709.02054) Focusing attention: Towards accurate text recognition in natural images*
+*[[FAN]](https://arxiv.org/abs/1709.02054) Focusing attention: Towards accurate text recognition in natural images*
 
 *[[RARE]](https://arxiv.org/abs/1603.03915) Robust Scene Text Recognition with Automatic Rectification*
 
 - FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현하였다.
 - C : 36 alphanumeric characters + 1 EOS(end of sentence)
-
-$$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
 
 **1. Encoding**
 
@@ -227,9 +222,5 @@ input을 sequential representation으로 변환
 
 output sequence 생성
 
-
-
-**3. Loss Function**
-
-
+$$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
 
