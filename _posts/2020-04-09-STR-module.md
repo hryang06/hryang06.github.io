@@ -215,7 +215,7 @@ t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림
 
 input을 sequential representation으로 변환
 
-![Figure 5](/assets/images/post/attn/figure5_attn.png)
+![Figure 5](/assets/images/post/attn/figure5_attn.PNG)
 
 
 **2. Decoding**
@@ -224,4 +224,4 @@ output sequence 생성
 
 $$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
 
-![Figure 5](/assets/images/post/attn/figure5_fan.png)
+![Figure 5](/assets/images/post/attn/figure5_fan.PNG)
