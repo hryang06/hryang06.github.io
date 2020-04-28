@@ -47,12 +47,25 @@ What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model A
 #### 1\) [**localization network**](#1.2-tps-implementation)
 : finding a text boundary
 
-input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다. $$\tilde C$$는 초기화되는 좌표로 normalized image(rectified image)에서의 fiducial points를 의미한다.
+![Figure 6](/assets/images/post/stn/figure6.PNG)
+
+- input image $$X$$ 위에 존재하는 fiducial points의 x-y좌표 $$C$$를 계산한다.
+- $$\tilde C$$는 초기화되는 좌표로, normalized image(rectified image)에서의 fiducial points를 의미한다.
 
 $$C = [c_1, ... , c_F] \in \mathbb{R^{2*F}}, c_f = [x_f, y_f]^T$$<br>
 $$\tilde C$$ : normalized image $$\tilde X$$의 pre-defined top & bottom location
 
-![Figure 6](/assets/images/post/stn/figure6.PNG)
+---
+
+RARE
+- 입력 이미지의 전체적인 텍스트 모양을 캡쳐하여, regressing을 통해 fiducial points F개의 위치를 찾아낸다. (fiducial points 개수는 짝수로, 여기서 20으로 초기화함)<br>
+$$C = [c_1, ... , c_F] \in \mathbb{R^{2*F}}, c_f = [x_f, y_f]^T$$
+- RARE[25]에서는 좌표는 [-1, 1] 범위안에 드는 normalized 좌표이다.
+- regression을 위해 CNN을 사용한다. (classification이 아닌 regression을 위해 사용!!)
+- RARE[25]에서는 [-1, 1] 범위 안에 있는 normalized 좌표로 C를 나타내고자 한다. 따라서, output layer(fully-connected layer)에서 output node를 2F로 하고, activation function으로 tanh을 사용하여 이러한 C를 만족하는 output vector를 가지도록 한다. 하지만, 이 논문에서는 activation function으로 ReLU를 사용하였다.
+- fiducial points 좌표에 대한 샘플은 없다. 즉, localization network의 training은 back-propagation에 따라 STN의 다른 부분에 의해 전파된 gradients에 의해 supervise 된다. (ground truth 없이 오직 back propagation에 의해 조정한다)
+
+---
 
 #### 2\) **grid generator** 
 : linking the location of the pixels in the boundary to those of the normalized image
@@ -74,7 +87,7 @@ grid generator으로 결정된 input image의 픽셀을 interpolate하여 normal
 
 ### 1.2 TPS-Implementation
 
-TPS는 input image의 fiducial points를 계산하는 localization network를 필요로 한다. RARE[[25]](#robust-scene-text-recognition-with-automatic-rectification)에서 사용한 요소에다가 Batch Normalization layers(BN)와 network의 training을 안정시키기 위해 adaptive average pooling(APool)을 추가한다.
+TPS는 input image의 fiducial points를 계산하는 localization network를 필요로 한다. RARE[25]에서 사용한 요소에다가 Batch Normalization layers(BN)와 network의 training을 안정시키기 위해 adaptive average pooling(APool)을 추가한다.
 
 ![Table 4](/assets/images/post/str/table4.PNG)
 
@@ -94,11 +107,25 @@ input image $$X$$ or $$\tilde X$$ -> feature map $$V = \{v_i\}, ( i = 1, ... , I
 
 ### 2.1 VGG
 
-- CRNN[24], RARE[25]에서 사용한 VGG를 구현하였다.
+*[[CRNN]](https://arxiv.org/abs/1507.05717) An End-to-End Trainable Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition*
 
 ![Table 5](/assets/images/post/str/table5.PNG)
 
+\* BN : Batch Normalization Layer
 
+- CRNN[24], RARE[25]에서 사용한 VGG를 구현하였다.
+
+---
+
+CRNN
+- CNN model로부터 convolution layer와 max pooling layer 가져온다. (fully-connected layer는 제거)
+- 모든 image(input)는 같은 높이를 가지도록 조정한다.
+- feature maps로부터 sequance of feature vectors(다음 단계 input)을 추출한다.
+- vector는 feature map에서 column 기준 왼쪽에서 오른쪽 방향으로 생성된다.
+- i번째 feature vector = 모든 feature map의 i번째 column (column의 넓이는 single pixel로 고정)
+    ![CRNN 2](/assets/images/post/crnn/figure2.PNG)
+
+---
 
 ### 2.2 RCNN (recurrently applied CNN)
 
@@ -135,8 +162,17 @@ $$H = Seq.(V)$$
 ### 3.1 BiLSTM (Bidirectional LSTM)
 
 - CRNN[24]에서 사용한 2-layers BiLSTM을 구현하였다.
+    ![CRNN 3](/assets/images/post/crnn/figure3.PNG)
 - FC layer를 포함한 모든 hidden state의 dimension은 256이다.
-- Seq. module을 사용하지 않은 경우, H = V
+- Sequence module을 사용하지 않는 경우, H = V
+
+recurrent layers를 사용할 때 장점
+1. RNN은 sequence 내에서 문맥 정보를 캡처하는 강력한 기능을 가진다.
+- 문맥 정보를 이용하는 것이 독립적으로 처리하는 것보다 안정적이고 도움이 된다.
+- 모호한 문자들은 문맥을 분석하면 더 구별하기 쉽다.
+- ex) i , l : 개별적으로 인식하는 것보다 문자 높이를 비교하여 인식하는 것이 더 쉽다.
+2. CNN과 RNN을 공동으로 학습할 수 있다.
+3. RNN은 
 
 ---
 
@@ -169,6 +205,8 @@ C : character label set (37)
 $$Y \approx M(argmax\ p(\pi \vert H))$$
 
 **1. Encoding**
+
+CTC Loss Function을 사용하기 위해 training 시작할 때 encoding을 하여 text sequence로 변환한다.
 
 특별한 문자 blank를 사용하여 중복 문자 문제를 해결한다. 예를 들어 to와 too라는 단어를 encoding하면 다음과 같다.
 
