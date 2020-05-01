@@ -50,7 +50,7 @@ characters
 
 training
 - num_iter = 300000 : training iteration (epoch이라고 보면 될 듯)
-- valInterval = 2000 : 몇번마다 validate할지 (validation마다 best accuracy와 norm ED를 찾아 saved_model에 저장한다.)
+- valInterval = 2000 : validate interval, 몇번마다 validate할지 (validation마다 best accuracy와 norm ED를 찾아 saved_model에 저장한다.)
 - saved_model = .pth
 - FT = False
 - adam = False : default인 Adadelta가 아닌 adam을 사용할지
