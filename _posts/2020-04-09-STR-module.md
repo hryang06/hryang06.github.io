@@ -249,12 +249,11 @@ t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림
 - FAN[4], AON[5], EP[2]에서 사용한 one layer LSTM attention decoder를 구현하였다.
 - C : 36 alphanumeric characters + 1 EOS(end of sentence)
 
-**1. Encoding**
-
-input을 sequential representation으로 변환
-
-**2. Decoding**
-
-output sequence 생성
+ decoder는 $$y_t$$를 예측한다.
 
 $$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
+- $$W_0, b_0$$ : trainable parameters
+- $$s_t = LSTM(y_{t-1}, c_t, s_{t-1})$$ : decoder LSTM hidden state at time t
+    - $$c_t$$ : context vector
+
+    ![Formula 10-12](/assets/images/post/str/formula10-12.PNG){: .center}
