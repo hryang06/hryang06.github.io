@@ -252,6 +252,7 @@ t는 time step이고, 세 가지 문자 {a, b, -}가 존재한다. 위의 그림
  decoder는 $$y_t$$를 예측한다.
 
 $$each\ step\ t, y_t = softmax(W_{_0S_t} + b_0)$$
+
 - $$W_0, b_0$$ : trainable parameters
 - $$s_t = LSTM(y_{t-1}, c_t, s_{t-1})$$ : decoder LSTM hidden state at time t
     - $$c_t$$ : context vector = glimpse vector([FAN] AN은 glimpse vector를 생성시키고 FN은 reasonable한지 판단함)
