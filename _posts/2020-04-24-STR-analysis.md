@@ -1,5 +1,5 @@
 ---
-title: STR analysis
+title: STR 재연 및 분석
 layout: single
 author_profile: true
 read_time: true
