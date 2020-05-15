@@ -83,14 +83,15 @@ What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model A
 - num_gpu = 1
 
 ## Experiment Result
+
+다음은 해당 논문의 appendix D를 정리한 글입니다.
+
 ![Table 8](/assets/images/post/str/table8.PNG)
 
 - Tranformation stage : None -> TPS (+1~5%)
 - Feature Extrator stage : VGG -> RCNN -> ResNet
 - Sequence modeling stage : None -> BiLSTM (+1~2%)
 - Prediction stage : CTC -> Attn (+2~5%)
-
-다음은 해당 논문의 appendix D를 정리한 글입니다.
 
 ### 1. Transformation Stage
 
