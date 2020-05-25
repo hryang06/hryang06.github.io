@@ -19,7 +19,7 @@ article_tag4: optical character recognition
 last_modified_at: 2020-05-14 17:26:00 +0800
 ---
 
-What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model Analysis을 재연하고 결과를 정리한 글입니다. (appendix D 참고)
+What Is Wrong With Scene Text Recognition Model Comparisons? Dataset and Model Analysis을 재연하고 결과를 정리한 글입니다.
 
 ## Setting Parameters
 
@@ -128,3 +128,86 @@ Attn은 CTC에 비해 정확도를 높이려고 할 때 시간이 오래 걸린�
 ![Pred Accuracy](/assets/images/post/str/predictionAccuracy.PNG)
 
 - 각 dataset마다 10개 이미지(gray scale)와 함께 label과 prediction을 확인하였다.
+
+- 각 dataset의 결과를 csv파일로 저장하여 FALSE인 경우에 대해 확인하였다.
+
+### IC13 (1015) : regular dataset
+
+CTC | Attn
+----|-----
+90.542 | 92.217
+
+- attn만 맞춘 경우 (34)
+- ctc만 맞춘 경우 (17)
+- 둘 다 틀린 경우 (62)
+
+ctc
+- feature map으로 부분으로 예측을 하다 보니 문제가 생긴다고 생각함
+- attention은 한 문자로 보고 예측을 하지만, ctc는 일부를 보고 부분부분 예측하다 보니 문자가 끊겨 있는 경우 예측이 힘든 것 같음
+- 반대로 부분부분 예측하다 보니 잘린 문자에 대해서는 제대로 인식하는 경우도 있음
+    - forever : 어두워서 잘 보이지 않음 / attn은 fonever로 예측했지만, ctc는 정확하게 예측함
+    - SECOM : M의 앞부분이 잘려있음 / attn은 secow로 예측했지만, ctc는 정확하게 예측함
+
+attn
+- attention을 전혀 잘못한 경우
+- attention은 잘하였으나 글자를 제대로 인식하지 못한 경우
+
+both
+- wordbox가 제대로 되어 있지 않는 경우 --> recognition보다는 detection의 문제로 보아야 한다고 생각함
+- 글자가 길어질수록 정확성 떨어짐
+
+- 꺾인 거에 대해 제대로 인식을 하지 못함
+    - 1의 윗부분이 꺾여 있음에도 불구하고 i나 l로 읽는 경우 많음
+    - t로 잘못 읽는 경우도 있음
+- 두꺼운 글자 ex) d
+- 애매하게 잘린 부분에 대해 인식하고 예측하는 경우 존재함(gt에는 포함되지 않음)
+- 한 문자를 여러 문자로 예측하는 경우
+    - SNOUT의 N을 I와 V로 인식함
+
+#### 문자가 끊겨 있는 경우
+
+![Sliced](/assets/images/post/str/sliced_character.PNG)
+
+u는 attn과 ctc 모두 ij로 예측하여 틀렸다. attn의 경우, attention을 잘못 한 것으로 예측된다. ctc의 경우, 잘려진 문자에 대해 모두 맞추지 못했는데, 이는 feature map을 대상으로 예측하기 때문에 부분 부분 인식한 것으로 보인다. (순서대로 ie, ijf, 4j로 예측함)
+
+
+### IC15 (1922) : irregular dataset
+
+CTC | Attn
+----|-----
+72.841 | 75.390
+
+- attn만 맞춘 경우 (124)
+- ctc만 맞춘 경우 (75)
+- 둘 다 틀린 경우 (398)
+
+ctc
+- 역시나 feature map으로 부분으로 예측을 하다 보니 문제가 생긴다고 생각함
+    - FairPrice : P를 F로 예측함 (ctc 특성상 왼쪽의 특징부터 확인하면 P와 F를 헷갈릴 수 있음)
+- 한글자를 빼먹는 경우가 많음
+    - citibank -> ctbanck : i를 빼먹음, i처럼 얇은 문자의 경우 종종 빼먹음
+
+attn
+- attention을 잘못하는 경우 -> 문자가 잘 보이지만, 제대로 예측할 수 없음
+![Attn False](/assets/images/post/str/only_attn_false_image.PNG)
+- I와 T를 반대로 예측한 경우
+
+both
+- 애매하게 잘린 부분에 대해 인식하고 예측하는 경우 존재함(gt에는 포함되지 않음)
+- ground truth가 잘못 적힌 이미지
+    - vehicles -> veichles(gt) , oiletries -> oiletreies(gt) , chabuton -> chanbuton(gt)
+- 한 문자를 여러 문자로 예측하는 경우 -> 그나마 attention이 강력함
+    - DARUE의 U를 L과 I로 인식함
+- 특정 문자 구분을 잘 못함
+    - O와 Q와 a와 0
+    - H와 N
+
+
+#### rotate image
+
+- rotate한 이미지가 많다.
+- 일반적으로 attn, ctc 모두 예측하지 못한다. (attention도 못하는 것으로 보임)
+- 현재 str은 수평으로 이루어진 이미지(왼쪽에서 오른쪽으로)만을 예측할 수 있다.
+- rotate 이미지를 예측하려면, transformation에서 rotate를 하여 network에서 학습할 수 있도록 해야 한다.
+- 예측한 결과(대부분 i)를 보면 rotate를 하지 못한 것 같다. (이미지 보이는 대로 예측한 것으로 보임)
+
