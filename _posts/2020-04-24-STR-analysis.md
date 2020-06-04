@@ -115,7 +115,7 @@ TPS와 비슷하지만, BiLSTM을 사용하면 비슷한 시간과 메모리에 
 
 Attn은 CTC에 비해 정확도를 높이려고 할 때 시간이 오래 걸린다.
 
-## 재연 및 정리
+## 재연 및 분석
 
 - 먼저 여러 combination에 대해 재연하였고, 30만번 반복하는 작업이 매우 오랜 시간을 필요로 한다는 것을 확인했다. 몇몇은 직접 train하였고, 몇몇은 이미 학습한 파일을 통해 train하였다. 논문에서 공개한 정확도와 거의 일치하였고, 한번은 20만번 반복하여 학습하였는데 30만번에 해당하는 정확도와 비슷하였다.
 
@@ -211,3 +211,19 @@ both
 - rotate 이미지를 예측하려면, transformation에서 rotate를 하여 network에서 학습할 수 있도록 해야 한다.
 - 예측한 결과(대부분 i)를 보면 rotate를 하지 못한 것 같다. (이미지 보이는 대로 예측한 것으로 보임)
 
+
+
+## 정리
+
+1. introduction
+    1. str
+    2. data
+    3. model
+2. experiment
+    1. prediction 기준 비교 및 분석 : 정확도 비교, 이미지 분석(어떠한 이미지에서 틀리는지, 장단점 등)
+    2. test time augmentation
+        1. data augmentation 설정 : translate(4) * scale(2) + org(1) = 9 종류
+        2. voting 방법
+            1. 빈도수가 가장 높은 경우
+            2. confidence accuracy에 의해
+            3. ctc encode/decode 방법 이용
