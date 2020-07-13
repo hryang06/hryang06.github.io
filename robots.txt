@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hryang06.github.io/sitemap.xml
