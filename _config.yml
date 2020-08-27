@@ -20,7 +20,7 @@ title                    : "hryang Blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Heerin Yang"
-description              : "personal blog"
+description              : "personal blog."
 url                      : "https://hryang06.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "hryang06/hryang06.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -97,7 +97,7 @@ author:
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "personal blog"
   location         : "Somewhere"
-  email            :
+  email            : "hryang416@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
