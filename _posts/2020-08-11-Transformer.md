@@ -1,5 +1,5 @@
 ---
-title: Transformer (Attention is All You Need)
+title: Transformer 이해하기 - Attention is All You Need
 layout: single
 author_profile: true
 read_time: true
@@ -44,6 +44,16 @@ $$ output~ of~ each~ Sublayer = LayerNorm(x + Sublayer(x)) $$
 - 이때, sub-layer의 output dimension = embedding dimension ( $$d_{model} = 512$$ )
 
 #### Decoder
+
+- N개의 동일한 layer ( $$N = 6$$ )
+- 각 layer는 두개의 sub-layers를 가짐
+    1. multi-head self-attention mechanism
+    2. (simple, position-wise fully connected) feed-forward network
+
+$$ output~ of~ each~ Sublayer = LayerNorm(x + Sublayer(x)) $$
+
+- 두 sub-layer에 residual connection(input을 output으로 그대로 전달)을 사용한 후, layer normalization을 한다.
+- 이때, sub-layer의 output dimension = embedding dimension ( $$d_{model} = 512$$ )
 
 ### Attention
 

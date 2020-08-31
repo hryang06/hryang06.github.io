@@ -1,5 +1,5 @@
 ---
-title: KorNLI and KorSTS
+title: KorNLI and KorSTS 정리
 layout: single
 author_profile: true
 read_time: true
