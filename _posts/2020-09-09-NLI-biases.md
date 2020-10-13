@@ -1,7 +1,6 @@
 ---
-title: Heuristic Analysis for NLI systems
+title: NLI dataset biases
 layout: single
-classes: wide
 author_profile: true
 read_time: true
 comments: true
@@ -17,9 +16,15 @@ article_tag2: HANS
 last_modified_at: 2020-09-09 15:03:00 +0800
 ---
 
-NLI generalization에 관하여 정리한 글입니다.
+NLI dataset biases에 관하여 정리한 글입니다.
 
-관련 논문 <br>
+| dataset     | type                                                                                          |
+|-------------|-----------------------------------------------------------------------------------------------|
+| Diagnostics | commonsense knowledge / logical reasoning / predicate-argument structures / lexical semantics |
+| HANS        | lexical overlap / subsequence / constituent                                                   |
+| Stress      | competence / distraction / noise                                                              |
+
+<br>관련 논문 <br>
 [Right for the Wrong Reasons: Diagnosing Syntactic Heuristics in Natural Language Inference](https://arxiv.org/abs/1902.01007) <br>
 [Adversarial Filters of Dataset Biases](https://arxiv.org/abs/2002.04108) <br>
 <https://arxiv.org/abs/1810.09774> <br>
@@ -27,13 +32,11 @@ NLI generalization에 관하여 정리한 글입니다.
 <https://arxiv.org/pdf/2003.02756.pdf> <br>
 <https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9031510>
 
-
 # GLUE : General Language Understanding Evaluation
 
 [GLUE: A Multi-Task Benchmark and Analysis Platform for Natural Language Understanding](https://arxiv.org/abs/1804.07461)
 
 dataset : <https://gluebenchmark.com/>
-
 
 - 사전 학습된 딥러닝 기반 언어 모델인 ELMo, GPT-1, BERT 모두 GLUE 벤치마크에서 당시 최고의 성능을 보임
 
@@ -209,6 +212,23 @@ github blog : <https://abhilasharavichander.github.io/NLI_StressTest/>
 - spelling error (m/mm)
 
 
+## Stress Test Evaluation of Transformer-based Models in Natural Language Understanding Tasks (paper)
+
+![Stress Test Acc.](/assets/images/post/hans/stress-test-acc.PNG)
+
+### models performance on Distribution Test
+
+두가지 방법으로 robustness를 확인할 수 있다.
+1. 
+
+### models performance on Noise Test
+
+
+
+### models performance on Competence Test
+
+
+
 <br><br>
 
 # AFLITE : Lightweight Adversarial Filtering
@@ -254,3 +274,4 @@ Adversarial NLI: A new benchmark for natural language understanding
 ![AFLITE algorithm](/assets/images/post/hans/aflite-algorithm.PNG)
 
 ![AFLITE SNLI](/assets/images/post/hans/snli-aflite.PNG)
+
