@@ -53,22 +53,28 @@ input에 $$p^\prime$$과 같은 required premise가 있는 것들이 누락되�
 
 ### contributions
 
-- our key contribution
+- our key contribution : outperforming CE(Contextual Embedding), by intergrating with complementary sources - SE(Structure Embedding) and DE(Description Embedding)
 
-two research questions
+- two research questions
 1. What is the missing information in BERT?
 2. Can we find such information from curated sources to augment BERT?
 
+![Representation](/assets/images/post/bert-commansense-inference/joint-coordinated-representation.PNG)
 
-1. missing information을 신경쓰지 않고, 
-2.
-
+1. missing information에 대해서, BERT의 knowledge는 co-occurrences에 bias된다고 가정한다.
+    - 예) sum - night의 negative association이 캡처되지 않을 수 있다. 오히려 이 문제와 상관없는 strong association이 캡처될 수 있다.
+    - 한편, KG의 human-curated relations는 두 relationships를 명확히 구분한다.
+    - curated & uncurated sources 모두 사용하는 모델이 NLI/CI tasks 둘다 더 효과적이라는 것을 보여줌으로써 이러한 가정을 검증한다.
+    - 이러한 관찰은 [8]과 일관됨 : KG와 BERT의 complementary nature를 주장하지만, 두가지 양상을 "fuse(융합)"하는 방법은 논의하지 않는다.
+2. KG와 BERT의 intergration을 multimodality fusion problem으로 제기하고, 기존 fusion models를 두 주요 categories로 분류한 survey[9]를 참고한다.
+    - (1) Joint representation : unimodal signals를 same shared representations space로 combine한다.
+    - (2) Coordinated representation : unimodal signals를 따로따로 처리하지만, "paired" cross-modal alignment training에 의해 유도되는 coordination constraints를 enforce한다.
+    - 예)
 
 contribution : to propose a BERT finetuning
 
 key distinction : do not require to retrain BERT, nor annotate additional cross-modal alighments
 
-![Representation](/assets/images/post/bert-commansense-inference/joint-coordinated-representation.PNG)
 
 ## 2. Preliminaries and Related Work
 
@@ -77,6 +83,9 @@ key distinction : do not require to retrain BERT, nor annotate additional cross-
 ### 2.2. Corpus : CE
 
 ### 2.3. Relation of our work
+
+### OWE (Open World Extension)
+[An open-world extension to knowledge graph completion models](https://arxiv.org/abs/1906.08382)
 
 
 ## 3. Proposed Approach
@@ -94,10 +103,17 @@ key distinction : do not require to retrain BERT, nor annotate additional cross-
 
 ### 4.1. Pre-trained Models
 
+BERT base pretrained model (*bert-base-uncased*)
+
 ### 4.2. Datasets
+
+- MultiNLI
+- Stree Test : Antonym matched/mismatched
+- COPA (Choice of Plausible Alternatives)
 
 ### 4.3. Results
 
+![result acc.](/assets/images/post/bert-commansense-inference/result-acc.PNG)
 
 ## 5. Conclusion
 
