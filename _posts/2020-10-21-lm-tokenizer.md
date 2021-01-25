@@ -47,6 +47,7 @@ bert_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 - Construct an ALBERT tokenizer based on **SentencePiece**.
 
 - This tokenizer inherits from **PreTrainedTokenizer** which contains most of the main methods. Users should refer to this superclass for more information regarding those methods.
+
 ```python
 from transformers import AlbertTokenizer
 

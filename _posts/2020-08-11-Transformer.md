@@ -1,6 +1,7 @@
 ---
 title: Transformer 이해하기 - Attention is All You Need
 layout: single
+classes: wide
 author_profile: true
 read_time: true
 use_math : true
